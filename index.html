@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!--
+  index.html — Glowny plik portalu Mojaplaylista / MyPlaylist
+  Utworzono: 2026-08-24 | Projekt: Mojaplaylista v1.0
+-->
+<html lang="pl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mojaplaylista</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/myplaylist_theme-light.css">
+  <link rel="stylesheet" href="css/myplaylist_theme-dark.css">
+  <link rel="stylesheet" href="css/myplaylist_responsive.css">
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="mp-header">
+  <div style="display:flex;align-items:center;gap:12px">
+    <button id="hamburger" class="mp-hamburger" aria-label="Menu">☰</button>
+    <span class="mp-header__logo" data-i18n="app.title">Mojaplaylista</span>
+  </div>
+  <div class="mp-header__controls">
+    <button id="langToggle" class="mp-header__btn" title="PL / EN">🌐 PL</button>
+    <button id="themeToggle" class="mp-header__btn" title="Motyw">🌙</button>
+  </div>
+</header>
+
+<!-- ===== LAYOUT ===== -->
+<div class="mp-layout">
+
+  <!-- SIDEBAR -->
+  <nav id="sidebar" class="mp-sidebar">
+    <button class="mp-nav__item mp-nav__item--active" data-nav="library">
+      <span class="mp-nav__icon">📚</span> <span data-i18n="nav.library">Biblioteka</span>
+    </button>
+    <button class="mp-nav__item" data-nav="categories">
+      <span class="mp-nav__icon">🏷️</span> <span data-i18n="nav.categories">Kategorie</span>
+    </button>
+    <button class="mp-nav__item" data-nav="stats">
+      <span class="mp-nav__icon">📊</span> <span data-i18n="nav.stats">Statystyki</span>
+    </button>
+    <button class="mp-nav__item" data-nav="settings">
+      <span class="mp-nav__icon">⚙️</span> <span data-i18n="nav.settings">Ustawienia</span>
+    </button>
+    <button class="mp-nav__item" data-nav="faq">
+      <span class="mp-nav__icon">❓</span> <span data-i18n="nav.faq">Pomoc</span>
+    </button>
+
+    <hr style="margin:16px 20px;border:0;border-top:1px solid var(--mp-card-border)">
+
+    <!-- Quick stats in sidebar -->
+    <div style="padding:8px 20px;font-size:0.85rem;color:var(--mp-text-tertiary)">
+      <div>🎵 <span id="statTotal">0</span> <span data-i18n="library.songs">piosenek</span></div>
+      <div>❤️ <span id="statLiked">0</span> <span data-i18n="library.liked">polubione</span></div>
+      <div>⏱️ <span id="statPlayTime">0</span></div>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="mp-main">
+
+    <!-- === LIBRARY VIEW === -->
+    <section data-view="library">
+      <!-- Dropzone -->
+      <div id="dropzone" class="mp-dropzone" style="margin-bottom:20px">
+        <div style="font-size:2rem;margin-bottom:8px">📁</div>
+        <div data-i18n="import.dropHint">Przeciągnij plik CSV lub JSON tutaj</div>
+        <div style="margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+          <button id="importCSVBtn" class="mp-btn mp-btn--primary mp-btn--small" data-i18n="import.csvButton">Importuj CSV</button>
+          <button id="importJSONBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="import.jsonButton">Importuj JSON</button>
+        </div>
+        <input type="file" id="fileInput" accept=".csv,.json" style="display:none">
+      </div>
+
+      <!-- Toolbar -->
+      <div class="mp-toolbar">
+        <input type="search" id="searchInput" class="mp-search" data-i18n="library.search" placeholder="Szukaj po tytule, artyście, albumie...">
+        <select id="sortSelect" class="mp-btn mp-btn--secondary">
+          <option value="title" data-i18n="library.sortTitle">Tytuł</option>
+          <option value="artist" data-i18n="library.sortArtist">Artysta</option>
+          <option value="playTime" data-i18n="library.sortPlayTime">Czas słuchania</option>
+          <option value="date" data-i18n="library.sortDate">Data dodania</option>
+        </select>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <button id="exportJSONBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.jsonFull">JSON</button>
+          <button id="exportCSVBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.csvFull">CSV</button>
+          <button id="exportMetrolistBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.csvMetrolist">Metrolist</button>
+        </div>
+      </div>
+
+      <!-- Song list -->
+      <div id="songList" class="mp-grid mp-grid--list">
+        <div class="mp-empty">
+          <div class="mp-empty__icon">🎵</div>
+          <div class="mp-empty__text" data-i18n="library.noSongs">Brak piosenek. Zaimportuj plik CSV lub JSON.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- === CATEGORIES VIEW === -->
+    <section data-view="categories" style="display:none">
+      <div class="mp-section">
+        <h2 class="mp-section__title" data-i18n="categories.title">Kategorie i tagi</h2>
+        <p style="color:var(--mp-text-secondary)">🚧 Dostępne w Etapie C</p>
+      </div>
+    </section>
+
+    <!-- === STATS VIEW === -->
+    <section data-view="stats" style="display:none">
+      <div class="mp-section">
+        <h2 class="mp-section__title" data-i18n="stats.title">Statystyki</h2>
+        <p style="color:var(--mp-text-secondary)">🚧 Dostępne w Etapie D</p>
+      </div>
+    </section>
+
+    <!-- === SETTINGS VIEW === -->
+    <section data-view="settings" style="display:none">
+      <div class="mp-section">
+        <h2 class="mp-section__title" data-i18n="settings.title">Ustawienia</h2>
+
+        <div class="mp-card" style="padding:20px;margin-bottom:16px">
+          <h3 data-i18n="settings.githubSync">Synchronizacja GitHub</h3>
+          <div class="mp-form-group" style="margin-top:12px">
+            <label data-i18n="settings.githubRepo">Repozytorium (user/repo)</label>
+            <input id="settingsGithubRepo" class="mp-form-input" placeholder="user/myplaylist">
+          </div>
+          <div class="mp-form-group">
+            <label data-i18n="settings.githubToken">Personal Access Token</label>
+            <input id="settingsGithubToken" type="password" class="mp-form-input" placeholder="ghp_...">
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button id="githubPullBtn" class="mp-btn mp-btn--secondary" data-i18n="settings.syncPull">Pobierz z GitHub</button>
+            <button id="githubPushBtn" class="mp-btn mp-btn--primary" data-i18n="settings.syncPush">Wyślij do GitHub</button>
+          </div>
+        </div>
+
+        <div class="mp-card" style="padding:20px;margin-bottom:16px">
+          <h3>Last.fm API</h3>
+          <div class="mp-form-group" style="margin-top:12px">
+            <label data-i18n="settings.lastfmKey">Last.fm API Key</label>
+            <input id="settingsLastfmKey" class="mp-form-input" placeholder="abc123...">
+          </div>
+        </div>
+
+        <button id="saveSettingsBtn" class="mp-btn mp-btn--primary" data-i18n="settings.save">Zapisz ustawienia</button>
+
+        <div class="mp-card" style="padding:20px;margin-top:24px;border-color:var(--mp-error)">
+          <h3 style="color:var(--mp-error)" data-i18n="settings.dangerZone">Strefa niebezpieczna</h3>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <button id="clearLibraryBtn" class="mp-btn mp-btn--danger mp-btn--small" data-i18n="library.clearLibrary">Wyczyść bibliotekę</button>
+            <button id="resetAllBtn" class="mp-btn mp-btn--danger mp-btn--small" data-i18n="settings.resetAll">Resetuj wszystko</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- === FAQ VIEW === -->
+    <section data-view="faq" style="display:none">
+      <div class="mp-section">
+        <h2 class="mp-section__title" data-i18n="faq.title">Pomoc i FAQ</h2>
+        <div class="mp-card" style="padding:20px;margin-bottom:12px">
+          <strong data-i18n="faq.q1"></strong>
+          <p style="color:var(--mp-text-secondary);margin-top:4px" data-i18n="faq.a1"></p>
+        </div>
+        <div class="mp-card" style="padding:20px;margin-bottom:12px">
+          <strong data-i18n="faq.q2"></strong>
+          <p style="color:var(--mp-text-secondary);margin-top:4px" data-i18n="faq.a2"></p>
+        </div>
+        <div class="mp-card" style="padding:20px;margin-bottom:12px">
+          <strong data-i18n="faq.q3"></strong>
+          <p style="color:var(--mp-text-secondary);margin-top:4px" data-i18n="faq.a3"></p>
+        </div>
+        <div class="mp-card" style="padding:20px;margin-bottom:12px">
+          <strong data-i18n="faq.q4"></strong>
+          <p style="color:var(--mp-text-secondary);margin-top:4px" data-i18n="faq.a4"></p>
+        </div>
+        <div class="mp-card" style="padding:20px;margin-bottom:12px">
+          <strong data-i18n="faq.q5"></strong>
+          <p style="color:var(--mp-text-secondary);margin-top:4px" data-i18n="faq.a5"></p>
+        </div>
+        <div class="mp-card" style="padding:20px;margin-bottom:12px">
+          <strong data-i18n="faq.q6"></strong>
+          <p style="color:var(--mp-text-secondary);margin-top:4px" data-i18n="faq.a6"></p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="mp-footer">
+  <span data-i18n="app.title">Mojaplaylista</span> ·
+  <span data-i18n="app.version">Wersja</span> 1.0.0-alpha ·
+  <span data-i18n="app.releaseDate">Data wydania</span>: 2026-08-24
+</footer>
+
+<!-- ===== SCRIPTS (modular) ===== -->
+<script src="js/myplaylist_i18n.js"></script>
+<script src="js/myplaylist_storage.js"></script>
+<script src="js/myplaylist_csv-import.js"></script>
+<script src="js/myplaylist_app.js"></script>
+
+</body>
+</html>
