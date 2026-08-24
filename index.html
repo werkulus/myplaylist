@@ -71,6 +71,7 @@
         <div style="margin-top:8px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
           <button id="importCSVBtn" class="mp-btn mp-btn--primary mp-btn--small" data-i18n="import.csvButton">Importuj CSV</button>
           <button id="importJSONBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="import.jsonButton">Importuj JSON</button>
+          <button id="importTakeoutBtn" class="mp-btn mp-btn--secondary mp-btn--small">📺 YouTube Takeout</button>
         </div>
         <input type="file" id="fileInput" accept=".csv,.json" style="display:none">
       </div>
@@ -87,9 +88,14 @@
         <div style="display:flex;gap:4px;flex-wrap:wrap">
           <button id="exportJSONBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.jsonFull">JSON</button>
           <button id="exportCSVBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.csvFull">CSV</button>
+          <button id="exportFilteredBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.csvFiltered">CSV filtr</button>
           <button id="exportMetrolistBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.csvMetrolist">Metrolist</button>
+          <button id="exportM3UBtn" class="mp-btn mp-btn--secondary mp-btn--small" data-i18n="export.m3u">M3U</button>
         </div>
       </div>
+
+      <!-- Filter chips -->
+      <div id="filterBar"></div>
 
       <!-- Song list -->
       <div id="songList" class="mp-grid mp-grid--list">
@@ -102,18 +108,12 @@
 
     <!-- === CATEGORIES VIEW === -->
     <section data-view="categories" style="display:none">
-      <div class="mp-section">
-        <h2 class="mp-section__title" data-i18n="categories.title">Kategorie i tagi</h2>
-        <p style="color:var(--mp-text-secondary)">🚧 Dostępne w Etapie C</p>
-      </div>
+      <!-- Rendered dynamically by myplaylist_categories.js -->
     </section>
 
     <!-- === STATS VIEW === -->
     <section data-view="stats" style="display:none">
-      <div class="mp-section">
-        <h2 class="mp-section__title" data-i18n="stats.title">Statystyki</h2>
-        <p style="color:var(--mp-text-secondary)">🚧 Dostępne w Etapie D</p>
-      </div>
+      <!-- Rendered dynamically by myplaylist_ui-stats.js -->
     </section>
 
     <!-- === SETTINGS VIEW === -->
@@ -202,6 +202,15 @@
 <script src="js/myplaylist_i18n.js"></script>
 <script src="js/myplaylist_storage.js"></script>
 <script src="js/myplaylist_csv-import.js"></script>
+<script src="js/myplaylist_yt-takeout.js"></script>
+<script src="js/myplaylist_api-songlink.js"></script>
+<script src="js/myplaylist_api-lastfm.js"></script>
+<script src="js/myplaylist_api-lyrics.js"></script>
+<script src="js/myplaylist_ui-detail.js"></script>
+<script src="js/myplaylist_categories.js"></script>
+<script src="js/myplaylist_search-filter.js"></script>
+<script src="js/myplaylist_export.js"></script>
+<script src="js/myplaylist_ui-stats.js"></script>
 <script src="js/myplaylist_app.js"></script>
 
 </body>

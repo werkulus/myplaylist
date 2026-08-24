@@ -1,0 +1,24 @@
+/**
+ * myplaylist_theme-dark.css — Ciemny motyw Material 3 inspirowany Vivi Music
+ * Utworzono: 2026-08-24 | Projekt: Mojaplaylista v1.0
+ */
+:root[data-theme="dark"] {
+  --mp-bg-primary: #0F0F1A; --mp-bg-secondary: #1A1A2E; --mp-bg-tertiary: #252540;
+  --mp-bg-elevated: #1E1E35; --mp-bg-overlay: rgba(0,0,0,0.6);
+  --mp-text-primary: #E8E8F0; --mp-text-secondary: #A0A0C0; --mp-text-tertiary: #6A6A8A;
+  --mp-text-inverse: #1A1A2E;
+  --mp-accent: #00B4D8; --mp-accent-light: #48CAE4; --mp-accent-dark: #0096C7;
+  --mp-accent-surface: #0A2A3A; --mp-accent-text: #CAF0F8;
+  --mp-liked: #FF4081; --mp-success: #66BB6A; --mp-warning: #FFA726; --mp-error: #EF5350;
+  --mp-card-bg: #1A1A2E; --mp-card-border: rgba(255,255,255,0.06);
+  --mp-card-shadow: 0 2px 8px rgba(0,0,0,0.3); --mp-card-shadow-hover: 0 8px 24px rgba(0,0,0,0.4);
+  --mp-card-radius: 16px; --mp-card-radius-sm: 12px;
+  --mp-input-bg: #252540; --mp-input-border: #3A3A5A; --mp-input-focus: var(--mp-accent);
+  --mp-header-bg: linear-gradient(135deg, #0A1628 0%, #0F2A4A 50%, #0077B6 100%);
+  --mp-header-text: #FFFFFF;
+  --mp-chip-bg: #252540; --mp-chip-text: #C0C0E0;
+  --mp-chip-active-bg: var(--mp-accent); --mp-chip-active-text: #FFFFFF;
+  --mp-sidebar-bg: #141428; --mp-sidebar-border: rgba(255,255,255,0.06);
+  --mp-scrollbar-track: #1A1A2E; --mp-scrollbar-thumb: #3A3A5A;
+  --mp-transition: 0.2s ease; --mp-transition-slow: 0.35s cubic-bezier(0.4,0,0.2,1);
+}

@@ -1,0 +1,244 @@
+/**
+ * myplaylist_responsive.css — Responsive layout i bazowe style komponentow
+ * Utworzono: 2026-08-24 | Projekt: Mojaplaylista v1.0
+ */
+
+/* === RESET & BASE === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--mp-bg-primary); color: var(--mp-text-primary);
+  line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column;
+  transition: background var(--mp-transition), color var(--mp-transition);
+}
+a { color: var(--mp-accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+button { cursor: pointer; font-family: inherit; }
+input, select, textarea { font-family: inherit; font-size: inherit; }
+
+/* === SCROLLBAR === */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--mp-scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--mp-scrollbar-thumb); border-radius: 4px; }
+
+/* === HEADER === */
+.mp-header {
+  background: var(--mp-header-bg); color: var(--mp-header-text);
+  padding: 16px 24px; display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+.mp-header__logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+.mp-header__controls { display: flex; gap: 8px; align-items: center; }
+.mp-header__btn {
+  background: rgba(255,255,255,0.15); border: none; color: white;
+  padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 500;
+  transition: background var(--mp-transition);
+}
+.mp-header__btn:hover { background: rgba(255,255,255,0.25); }
+.mp-header__btn--active { background: rgba(255,255,255,0.3); }
+
+/* === LAYOUT === */
+.mp-layout { display: flex; flex: 1; min-height: 0; }
+.mp-sidebar {
+  width: 220px; background: var(--mp-sidebar-bg); border-right: 1px solid var(--mp-sidebar-border);
+  padding: 16px 0; flex-shrink: 0; overflow-y: auto;
+  transition: background var(--mp-transition), border-color var(--mp-transition);
+}
+.mp-main { flex: 1; padding: 24px; overflow-y: auto; }
+
+/* === NAV === */
+.mp-nav__item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 20px; color: var(--mp-text-secondary); font-weight: 500;
+  border: none; background: none; width: 100%; text-align: left;
+  transition: all var(--mp-transition); font-size: 0.95rem; cursor: pointer;
+}
+.mp-nav__item:hover { background: var(--mp-accent-surface); color: var(--mp-accent); }
+.mp-nav__item--active {
+  color: var(--mp-accent); background: var(--mp-accent-surface);
+  border-right: 3px solid var(--mp-accent);
+}
+.mp-nav__icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+/* === CARDS === */
+.mp-card {
+  background: var(--mp-card-bg); border: 1px solid var(--mp-card-border);
+  border-radius: var(--mp-card-radius); box-shadow: var(--mp-card-shadow);
+  transition: box-shadow var(--mp-transition), transform var(--mp-transition);
+  overflow: hidden;
+}
+.mp-card:hover { box-shadow: var(--mp-card-shadow-hover); transform: translateY(-2px); }
+
+/* === SONG CARD === */
+.mp-song-card {
+  display: flex; gap: 12px; padding: 12px; align-items: center; cursor: pointer;
+}
+.mp-song-card__thumb {
+  width: 56px; height: 56px; border-radius: var(--mp-card-radius-sm);
+  object-fit: cover; flex-shrink: 0; background: var(--mp-bg-tertiary);
+}
+.mp-song-card__info { flex: 1; min-width: 0; }
+.mp-song-card__title {
+  font-weight: 600; font-size: 0.95rem; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.mp-song-card__artist {
+  color: var(--mp-text-secondary); font-size: 0.85rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mp-song-card__meta {
+  display: flex; gap: 8px; align-items: center; font-size: 0.8rem;
+  color: var(--mp-text-tertiary); margin-top: 2px;
+}
+.mp-song-card__liked { color: var(--mp-liked); font-size: 1rem; }
+.mp-song-card__actions { display: flex; gap: 4px; flex-shrink: 0; }
+.mp-song-card__check {
+  width: 20px; height: 20px; accent-color: var(--mp-accent); flex-shrink: 0;
+}
+
+/* === GRID VIEWS === */
+.mp-grid { display: grid; gap: 12px; }
+.mp-grid--list { grid-template-columns: 1fr; }
+.mp-grid--cards { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+
+/* === TOOLBAR === */
+.mp-toolbar {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+  padding: 16px 0; border-bottom: 1px solid var(--mp-card-border); margin-bottom: 16px;
+}
+.mp-search {
+  flex: 1; min-width: 200px; padding: 10px 16px; border-radius: 28px;
+  border: 1px solid var(--mp-input-border); background: var(--mp-input-bg);
+  color: var(--mp-text-primary); font-size: 0.95rem;
+  transition: border-color var(--mp-transition), box-shadow var(--mp-transition);
+}
+.mp-search:focus {
+  outline: none; border-color: var(--mp-input-focus);
+  box-shadow: 0 0 0 3px rgba(0,180,216,0.15);
+}
+
+/* === BUTTONS === */
+.mp-btn {
+  padding: 8px 16px; border-radius: 8px; border: none; font-weight: 500;
+  font-size: 0.9rem; transition: all var(--mp-transition); display: inline-flex;
+  align-items: center; gap: 6px;
+}
+.mp-btn--primary { background: var(--mp-accent); color: white; }
+.mp-btn--primary:hover { background: var(--mp-accent-dark); }
+.mp-btn--secondary { background: var(--mp-chip-bg); color: var(--mp-text-primary); }
+.mp-btn--secondary:hover { background: var(--mp-input-border); }
+.mp-btn--danger { background: var(--mp-error); color: white; }
+.mp-btn--small { padding: 6px 10px; font-size: 0.8rem; }
+.mp-btn--icon { padding: 8px; border-radius: 50%; }
+
+/* === CHIPS === */
+.mp-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 12px; border-radius: 16px; font-size: 0.8rem; font-weight: 500;
+  background: var(--mp-chip-bg); color: var(--mp-chip-text);
+  border: none; cursor: pointer; transition: all var(--mp-transition);
+}
+.mp-chip--active { background: var(--mp-chip-active-bg); color: var(--mp-chip-active-text); }
+
+/* === EMPTY STATE === */
+.mp-empty {
+  text-align: center; padding: 60px 20px; color: var(--mp-text-tertiary);
+}
+.mp-empty__icon { font-size: 4rem; margin-bottom: 16px; opacity: 0.5; }
+.mp-empty__text { font-size: 1.1rem; margin-bottom: 8px; }
+
+/* === DROP ZONE === */
+.mp-dropzone {
+  border: 2px dashed var(--mp-input-border); border-radius: var(--mp-card-radius);
+  padding: 40px; text-align: center; cursor: pointer;
+  transition: all var(--mp-transition); background: var(--mp-bg-tertiary);
+}
+.mp-dropzone--active { border-color: var(--mp-accent); background: var(--mp-accent-surface); }
+
+/* === MODAL === */
+.mp-modal-backdrop {
+  position: fixed; inset: 0; background: var(--mp-bg-overlay);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity var(--mp-transition);
+}
+.mp-modal-backdrop--open { opacity: 1; pointer-events: auto; }
+.mp-modal {
+  background: var(--mp-bg-elevated); border-radius: var(--mp-card-radius);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2); max-width: 600px; width: 90%;
+  max-height: 85vh; overflow-y: auto; padding: 24px;
+}
+.mp-modal__title { font-size: 1.3rem; font-weight: 700; margin-bottom: 16px; }
+
+/* === FOOTER === */
+.mp-footer {
+  text-align: center; padding: 16px; font-size: 0.8rem;
+  color: var(--mp-text-tertiary); border-top: 1px solid var(--mp-card-border);
+}
+
+/* === TOAST === */
+.mp-toast {
+  position: fixed; bottom: 24px; right: 24px; padding: 12px 20px;
+  border-radius: var(--mp-card-radius-sm); color: white; font-weight: 500;
+  z-index: 300; transform: translateY(100px); opacity: 0;
+  transition: all var(--mp-transition-slow);
+}
+.mp-toast--visible { transform: translateY(0); opacity: 1; }
+.mp-toast--success { background: var(--mp-success); }
+.mp-toast--error { background: var(--mp-error); }
+.mp-toast--info { background: var(--mp-accent); }
+
+/* === SETTINGS FORM === */
+.mp-form-group { margin-bottom: 16px; }
+.mp-form-group label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 0.9rem; }
+.mp-form-input {
+  width: 100%; padding: 10px 14px; border-radius: 8px;
+  border: 1px solid var(--mp-input-border); background: var(--mp-input-bg);
+  color: var(--mp-text-primary); transition: border-color var(--mp-transition);
+}
+.mp-form-input:focus { outline: none; border-color: var(--mp-input-focus); }
+
+/* === SECTION === */
+.mp-section { margin-bottom: 32px; }
+.mp-section__title { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; }
+
+/* === HAMBURGER (mobile) === */
+.mp-hamburger {
+  display: none; background: none; border: none; color: white;
+  font-size: 1.5rem; padding: 4px;
+}
+
+/* =========== RESPONSIVE =========== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .mp-sidebar { width: 180px; }
+  .mp-main { padding: 16px; }
+  .mp-grid--cards { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .mp-hamburger { display: block; }
+  .mp-header { padding: 12px 16px; }
+  .mp-header__logo { font-size: 1.2rem; }
+  .mp-layout { flex-direction: column; }
+
+  .mp-sidebar {
+    position: fixed; left: -280px; top: 0; bottom: 0; width: 260px;
+    z-index: 150; box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+    transition: left var(--mp-transition-slow);
+    padding-top: 72px;
+  }
+  .mp-sidebar--open { left: 0; }
+
+  .mp-main { padding: 12px; }
+  .mp-grid--cards { grid-template-columns: 1fr; }
+  .mp-toolbar { flex-direction: column; align-items: stretch; }
+  .mp-search { min-width: unset; }
+
+  .mp-song-card__thumb { width: 48px; height: 48px; }
+  .mp-modal { width: 95%; padding: 16px; }
+  .mp-toast { left: 12px; right: 12px; bottom: 12px; text-align: center; }
+}
