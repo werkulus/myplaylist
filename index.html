@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mojaplaylista</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* === THEME LIGHT === */
@@ -317,6 +318,7 @@ const DB={
 
 /* ========== CSV PARSER ========== */
 function parseCSV(text){
+  text=text.replace(/^\uFEFF/,'');
   const lines=[],R=[];let cur=[],f='',q=false;
   for(let i=0;i<text.length;i++){
     const c=text[i];
@@ -327,21 +329,37 @@ function parseCSV(text){
   }
   cur.push(f);if(cur.some(x=>x.trim()))lines.push(cur);
   if(lines.length<2)return[];
-  const hdr=lines[0].map(h=>h.trim().toLowerCase());
-  const gi=k=>{const i=hdr.indexOf(k);return i};
+  const hdr=lines[0].map(h=>h.trim().toLowerCase().replace(/[^a-z0-9_]/g,''));
+  const hasVideoId=hdr.includes('video_id');
+  const gi=k=>hdr.indexOf(k);
   for(let i=1;i<lines.length;i++){
     const r=lines[i],g=(k)=>{const x=gi(k);return x>=0&&x<r.length?r[x].trim():''};
-    const id=g('video_id');if(!id)continue;
-    R.push({
-      id, title:g('title'), artists:g('artists'), album:g('album'),
-      duration:parseInt(g('duration_sec'))||null, liked:g('liked')==='1',
-      playTimeMs:parseInt(g('play_time_ms'))||0,
-      sources:g('sources').split(';').map(s=>s.trim()).filter(Boolean),
-      originalPlaylists:g('playlists').split(';').map(s=>s.trim()).filter(Boolean),
-      thumbnailUrl:g('thumbnail_url')||null,
-      ytUrl:g('yt_music_url')||`https://music.youtube.com/watch?v=${id}`,
-      tags:[],categories:[],genre:null,links:{},lyrics:null,addedAt:new Date().toISOString()
-    });
+    if(hasVideoId){
+      const id=g('video_id');if(!id)continue;
+      const thumb=g('thumbnail_url')||null;
+      R.push({
+        id, title:g('title'), artists:g('artists'), album:g('album'),
+        duration:parseInt(g('duration_sec'))||null, liked:g('liked')==='1',
+        playTimeMs:parseInt(g('play_time_ms'))||0,
+        sources:g('sources').split(';').map(s=>s.trim()).filter(Boolean),
+        originalPlaylists:g('playlists').split(';').map(s=>s.trim()).filter(Boolean),
+        thumbnailUrl:thumb,
+        ytUrl:g('yt_music_url')||`https://music.youtube.com/watch?v=${id}`,
+        tags:[],categories:[],genre:null,links:{},lyrics:null,addedAt:new Date().toISOString()
+      });
+    } else {
+      // Simple format: artist,title (Metrolist export)
+      const artist=r[0]?.trim()||'';
+      const title=r[1]?.trim()||'';
+      if(!title)continue;
+      R.push({
+        id:'csv_'+Date.now()+'_'+i,title,artists:artist,album:'',
+        duration:null,liked:false,playTimeMs:0,sources:['csv_import'],
+        originalPlaylists:[],thumbnailUrl:null,
+        ytUrl:'',tags:[],categories:[],genre:null,links:{},lyrics:null,
+        addedAt:new Date().toISOString()
+      });
+    }
   }
   return R;
 }
@@ -662,13 +680,13 @@ const App={
   /* ---- SETTINGS ---- */
   _renderSet(){
     document.getElementById('mn').innerHTML=`<div class="sec-t">${t('settings')}</div>
-      <div class="card"><h3>${t('ghSync')}</h3>
-        <div class="fg" style="margin-top:10px"><label>${t('ghRepo')}</label><input class="fi" id="sGhR" placeholder="user/myplaylist"></div>
-        <div class="fg"><label>${t('ghToken')}</label><input class="fi" id="sGhT" type="password" placeholder="ghp_..."></div>
-        <div class="fg"><label>${t('ghPwd')}</label><input class="fi" id="sGhP" type="password" placeholder="..."></div>
-        <div style="display:flex;gap:6px"><button class="btn btn-s" onclick="App._ghPull()">${t('ghPull')}</button>
-          <button class="btn btn-p" onclick="App._ghPush()">${t('ghPush')}</button></div>
-      </div>
+      <div class="card"><h3>${t('ghSync')}</h3><form autocomplete="off" onsubmit="return false">
+        <div class="fg" style="margin-top:10px"><label>${t('ghRepo')}</label><input class="fi" id="sGhR" placeholder="user/myplaylist" autocomplete="off"></div>
+        <div class="fg"><label>${t('ghToken')}</label><input class="fi" id="sGhT" type="password" placeholder="ghp_..." autocomplete="off"></div>
+        <div class="fg"><label>${t('ghPwd')}</label><input class="fi" id="sGhP" type="password" placeholder="..." autocomplete="off"></div>
+        <div style="display:flex;gap:6px"><button type="button" class="btn btn-s" onclick="App._ghPull()">${t('ghPull')}</button>
+          <button type="button" class="btn btn-p" onclick="App._ghPush()">${t('ghPush')}</button></div>
+      </form></div>
       <div class="card" style="border-color:var(--err)"><h3 style="color:var(--err)">${t('danger')}</h3>
         <div style="margin-top:10px;display:flex;gap:6px">
           <button class="btn btn-d btn-sm" onclick="App._clearAll()">${t('clearLib')}</button>
